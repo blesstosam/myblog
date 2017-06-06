@@ -1,0 +1,60 @@
+html,body{
+    margin:0;
+    padding:0;
+}
+#register{
+    position: absolute;
+    left:1050px;
+    top:70px;
+}
+.toRegister,.toLogin{
+    float: right;
+    margin-top:-25px;
+}
+#userInfo{
+    margin-top:21px;
+    width:300px;
+    height:150px;
+    position: absolute;
+    right:200px;
+    top:50px;
+    font-size: 16px;
+    color:blue;
+    background-color: #eee;
+}
+.content-wrap{
+    position: absolute;
+    left:160px;
+}
+.content-wrap>div{
+    margin-top:30px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    width:830px;
+    height:220px;
+    background-color: #eee;
+    overflow: hidden;
+}
+.content-wrap>div span{
+    color:#2aabd2;
+}
+.content-wrap p{
+    text-indent: 2em;
+    height:60px;
+    width:800px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+.content-wrap button{
+    position: absolute;
+    bottom: 20px;
+    left:20px;
+    border:0;
+    border-radius: 5px;
+    width:100px;
+    height:30px;
+    background-color: #FF5722;
+    font-weight: bold;
+    color:white;
+}
