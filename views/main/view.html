@@ -21,9 +21,9 @@
 
             {% for cate in categories %}
                 {% if category==cate.id %}
-            <li><a href="?category={{cate.id}}" class="active">{{cate.name}}</a></li>
+            <li><a href="/?category={{cate.id}}" class="active">{{cate.name}}</a></li>
                 {% else %}
-            <li><a href="?category={{cate.id}}">{{cate.name}}</a></li>
+            <li><a href="/?category={{cate.id}}">{{cate.name}}</a></li>
                 {% endif %}
             {% endfor %}
         </ul>
@@ -66,50 +66,52 @@
     {% endif %}
 
 
-    <!--内容分页-->
-    <div class="content-wrap">
-        {% for content in contents %}
-        <div>
-            <h2>{{content.title}}</h2>
-            作者：<span>{{content.user.username}}</span>
-            时间：<span>{{content.addTime.toLocaleString()}}</span>
-            阅读：<span>{{content.views}}</span>
-            评论：<span>1</span>
-            <p>{{content.content}}</p>
-            <button><a style="color:white;" href="/view?contentid={{content.id}}">阅读全文</a></button>
-        </div>
-        {% endfor %}
+    <!--内容详情-->
+    <div id="content">
+        <h2>{{content.title}}</h2>
+        作者：<span>{{content.user.username}}</span>
+        时间：<span>{{content.addTime.toLocaleString()}}</span>
+        阅读：<span>{{content.views}}</span>
+        评论：<span>1</span>
+        <p>{{content.content}}</p>
+        <input id="hidden" type="hidden" value="{{content.id}}"/>
     </div>
 
+    <!--评论-->
+    <div id="comments">
+        <div class="first">
+            <span>评论</span>
+            <span>共有{{content.comments.length}}条评论</span>
+        </div>
+        <input type="text" name="comment" placeholder="评论"/>
+        <button id="comBtn">提交</button>
+
+        <div id="warnCom"></div>
+
+        {% if !userInfo._id %}
+        <div class="remind">
+            您还未登录，请先登录！
+        </div>
+        {% endif %}
+
+        {% for comment in content.comments %}
+        <li class="floor">
+            <div>{{comment.username}} {{comment.postTime.toLocaleString()}}</div>
+            <div>{{comment.content}}</div>
+            <hr style="margin-bottom: 0;border:1px solid #eee"/>
+        </li>
+        {% endfor %}
+
+    </div>
 
 </div>
 
-<nav style="position: absolute;left:500px;bottom: -500px" aria-label="...">
-    <ul class="pager">
-        {% if category %}
-        <li><a href="?page={{page-1}}&category={{category}}">上一页</a></li>
-        {% else %}
-        <li><a href="?page={{page-1}}">上一页</a></li>
-        {% endif %}
-        <li>
-            {% if pages>0 %}
-            第{{page}}页/共{{pages}}页
-            {% else %}
-            啥都没有
-            {% endif %}
-        </li>
-        {% if category %}
-        <li><a href="?page={{page+1}}&category={{category}}">下一页</a></li>
-        {% else %}
-        <li><a href="?page={{page+1}}">下一页</a></li>
-        {% endif %}
-    </ul>
-</nav>
 
 
 <script src="/public/js/jquery.min.js"></script>
 <script src="/public/js/bootstrap.min.js"></script>
 <script src="/public/js/index.js"></script>
+<script src="/public/js/comments.js"></script>
 </body>
 </html>
 

@@ -1,80 +1,35 @@
 
 $(function () {
 
-    /**
-     * 控制登录注册切换
-     */
-    $('.toRegister').find('a').click(function () {
-        $(this).hide();
-        $('.toLogin').find('a').show();
-        $('#password2').show().prev().show();
-        $('#logonBtn').hide().
-        next().show();
-    });
-
-    $('.toLogin').find('a').click(function () {
-        $(this).hide();
-        $('.toRegister').find('a').show();
-        $('#password2').hide().prev().hide();
-        $('#logonBtn').show().
-        next().hide();
-    });
-
-
-
 
     /**
-     * 清空按钮
+     * 提交评论
      */
-    $('#reset').click(function () {
-        $('#username').val('');
-        $('#password1').val('');
-        $('#password2').val('');
-    });
+    $('#comBtn').click(function () {
 
-
-    /**
-     * 注册ajax请求
-     */
-    $('#registerBtn').click(function () {
-        var user=$('#username').val();
-        var psd1=$('#password1').val();
-        var psd2=$('#password2').val();
+        var _content=$('#comments input').val();
+        var _hidden=$('#hidden').val();
 
         //前台验证用户输入
-        if(user==''){
-            $('#warnMsg').css("color","red").text('用户名不能为空');
+        if(_content==''){
+            $('#warnCom').css("color","red").text('评论不能为空');
             return;
-        }
-        if(psd1==''){
-            $('#warnMsg').css("color","red").text('密码不能为空');
-            return;
-        }
-        if(psd2==''){
-            $('#warnMsg').css("color","red").text('密码不能为空');
-            return;
-        }
-        if(psd1!=psd2){
-            $('#warnMsg').css("color","red").text('两次密码不相同');
-            $('#password2').val('').focus(function () {
-                $('#warnMsg').text('');
-            });
-        }else{
+        } else{
             $.ajax({
                 type:'post',
-                url:'/api/user/register',
+                url:'api/comment/post',
                 data:{
-                    username:user,
-                    password:psd1
+                    content:_content,
+                    id:_hidden
                 },
                 dataType:'json',
                 success:function (res) {
                     if(res.code==4){
-                        $('#warnMsg').css("color","red").text(res.message);
+                        $('#warnCom').css("color","red").text(res.message);
                     }else{
-                        $('#warnMsg').css("color","red").text('注册成功');
+                        $('#warnCom').css("color","red").text(res.message);
                         setTimeout(function () {
-                            $('#warnMsg').css("color","red").text('');
+                            $('#warnCom').css("color","red").text('');
                         },1000);
                     }
                 }
@@ -83,66 +38,7 @@ $(function () {
     });
 
 
-    /**
-     * 登录ajax请求
-     */
-    $('#logonBtn').click(function () {
-        var user=$('#username').val();
-        var psd=$('#password1').val();
 
-        if(user==''){
-            $('#warnMsg').css("color","red").text('用户名不能为空');
-            return;
-        }
-        if(psd==''){
-            $('#warnMsg').css("color","red").text('密码不能为空');
-            return;
-        }
-        $.ajax({
-            type:'post',
-            url:'/api/user/login',
-            dataType:'json',
-            data:{
-                username:user,
-                password:psd
-            },
-            success:function (res) {
-                if(!res.code){
-
-                    //登录成功
-                    window.location.reload();
-
-                }else{
-                    $('#warnMsg').css("color","red").text(res.message);
-                    $('#username').val('').focus(function () {
-                        $('#warnMsg').css("color","red").text('');
-                    });
-                    $('#password1').val('').focus(function () {
-                        $('#warnMsg').css("color","red").text('');
-                    });
-                }
-            }
-        })
-
-    });
-
-
-
-    /**
-     * 退出ajax请求
-     */
-    $('#logout').click(function () {
-        $.ajax({
-            type:'get',
-            url:'/api/user/logout',
-            success:function (res) {
-                if(!res.code){
-
-                    window.location.reload();
-                }
-            }
-        });
-    })
 
 
 });

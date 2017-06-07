@@ -11,10 +11,20 @@
 
 <div class="container-fluid">
     <nav class="navbar-collapse collapse">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#">首页</a></li>
-            {% for category in categories %}
-            <li><a href="?category={{category.id}}">{{category.name}}</a></li>
+        <ul class="nav nav-tabs" id="nav">
+
+            {% if !category %}
+            <li class="active"><a href="/">首页</a></li>
+            {% else %}
+            <li><a href="/">首页</a></li>
+            {% endif %}
+
+            {% for cate in categories %}
+                {% if category==cate.id %}
+            <li><a href="?category={{cate.id}}" class="active">{{cate.name}}</a></li>
+                {% else %}
+            <li><a href="?category={{cate.id}}">{{cate.name}}</a></li>
+                {% endif %}
             {% endfor %}
         </ul>
     </nav>
@@ -66,7 +76,7 @@
             阅读：<span>{{content.views}}</span>
             评论：<span>1</span>
             <p>{{content.content}}</p>
-            <button>阅读全文</button>
+            <button><a style="color:white;" href="/view?contentid={{content.id}}">阅读全文</a></button>
         </div>
         {% endfor %}
     </div>
@@ -76,11 +86,23 @@
 
 <nav style="position: absolute;left:500px;bottom: -500px" aria-label="...">
     <ul class="pager">
+        {% if category %}
+        <li><a href="?page={{page-1}}&category={{category}}">上一页</a></li>
+        {% else %}
         <li><a href="?page={{page-1}}">上一页</a></li>
+        {% endif %}
         <li>
+            {% if pages>0 %}
             第{{page}}页/共{{pages}}页
+            {% else %}
+            啥都没有
+            {% endif %}
         </li>
+        {% if category %}
+        <li><a href="?page={{page+1}}&category={{category}}">下一页</a></li>
+        {% else %}
         <li><a href="?page={{page+1}}">下一页</a></li>
+        {% endif %}
     </ul>
 </nav>
 

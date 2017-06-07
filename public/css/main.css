@@ -25,6 +25,7 @@ html,body{
 .content-wrap{
     position: absolute;
     left:160px;
+    width:831px;
 }
 .content-wrap>div{
     margin-top:30px;
@@ -57,4 +58,45 @@ html,body{
     background-color: #FF5722;
     font-weight: bold;
     color:white;
+}
+#content{
+    margin-left:100px;
+    width: 700px;
+    /*text-overflow: ellipsis;*/
+    overflow: hidden;
+}
+#comments{
+    margin-top:50px;
+    position: relative;
+    margin-left:100px;
+    width:700px;
+}
+#comments .first{
+    height:50px;
+}
+#comments input{
+    width:700px;
+    height:50px;
+}
+#comments button{
+    position: absolute;
+    left:600px;
+    top:50px;
+    width:100px;
+    height:50px;
+    border: 0;
+    background-color: #2aabd2;
+    color:white;
+}
+#comments .remind{
+    margin-top:20px;
+    text-align: center;
+    font-size:16px;
+    line-height: 30px;
+    height:30px;
+    background-color: #afd9ee;
+}
+#comments li{
+    list-style: none;
+    height:60px;
 }

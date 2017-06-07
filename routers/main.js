@@ -13,6 +13,7 @@ router.get('/',function (req,res,next) {
 
     var data={
         userInfo:req.userInfo,
+        category:req.query.category || '',
         categories:[],
 
         count:0,
@@ -22,12 +23,20 @@ router.get('/',function (req,res,next) {
     };
     var skip=0;
 
+    var where={};
+
+
+    //通过分类来查找
+    if(data.category){
+        where.category=data.category;
+    }
+
     //查找分类
     Category.find().then(function (categories) {
 
         data.categories=categories;
 
-        return Content.count();
+        return Content.where(where).count();
 
     }).then(function (count) {
 
@@ -41,7 +50,7 @@ router.get('/',function (req,res,next) {
         data.page=Math.max(data.page,1);
         skip=(data.page-1)*data.limit;
 
-        return Content.find().sort({_id:-1}).limit(data.limit).
+        return Content.where(where).find().sort({_id:-1}).limit(data.limit).
         skip(skip).populate(['category','user']);
 
     }).then(function (contents) {
@@ -49,6 +58,42 @@ router.get('/',function (req,res,next) {
         data.contents=contents;
         res.render('./main/index',data);
 
+    });
+
+});
+
+
+/**
+ * 内容详情页
+ */
+router.get('/view',function (req,res) {
+
+    var data={
+        userInfo:req.userInfo,
+        contentid:req.query.contentid || '',
+        categories:[],
+        content:{}
+    };
+
+
+    //查找分类
+    Category.find().then(function (categories) {
+
+        data.categories=categories;
+
+        return Content.findOne({
+            _id:data.contentid
+        });
+
+    }).then(function (content) {
+
+        data.content=content;
+
+        //阅读加1并保存
+        content.views++;
+        content.save();
+
+        res.render('./main/view',data)
     });
 
 });
