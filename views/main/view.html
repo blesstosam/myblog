@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>博客首页</title>
+    <link rel="stylesheet" href="/public/css/main.css" />
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+</head>
+<body>
+
+
+<div class="container-fluid">
+    <nav class="navbar-collapse collapse">
+        <ul class="nav nav-tabs" id="nav">
+
+            {% if !category %}
+            <li class="active"><a href="/">首页</a></li>
+            {% else %}
+            <li><a href="/">首页</a></li>
+            {% endif %}
+
+            {% for cate in categories %}
+                {% if category==cate.id %}
+            <li><a href="?category={{cate.id}}" class="active">{{cate.name}}</a></li>
+                {% else %}
+            <li><a href="?category={{cate.id}}">{{cate.name}}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </nav>
+
+
+    <!--登录后显示用户信息-->
+    <!--用模板语法来控制其显示还是隐藏-->
+    {% if userInfo._id %}
+    <div id="userInfo">
+
+        {% if userInfo.isAdmin %}
+        <span>您好：管理员{{userInfo.username}}</span><br>
+        <a href="/admin">进入管理首页</a><br>
+        {% else %}
+        <span>您好：用户{{userInfo.username}}</span><br>
+        {% endif %}
+
+        <a href="javascript:void(0);" id="logout">退出</a>
+    </div>
+
+
+    <!--登录注册用ajax来完成，而不是用form表单-->
+    {% else %}
+    <div id="register">
+        <label for="username">用户：</label>
+        <input id="username" style="width:300px" class="form-control" type="text" name="username" placeholder="user"/><br>
+        <label for="password1">密码：</label>
+        <input id="password1" style="width:300px" class="form-control" type="password" name="password" placeholder="password"><br>
+        <label style="display: none" for="password2">再次输入密码：</label>
+        <input style="display: none" id="password2" style="width:300px" class="form-control" type="password" name="password" placeholder="password again"><br>
+        <button id="logonBtn" type="submit" class="btn btn-primary btn-sm">登录</button>
+        <button id="registerBtn" type="submit" class="btn btn-primary btn-sm" style="display: none">注册</button>
+        <button id='reset' type="reset" class="btn btn-danger btn-sm">清空</button>
+        <div id="warnMsg"></div>
+
+        <div class="toRegister"><a href="javascript:void(0);">还没账号？</a></div>
+        <div class="toLogin"><a href="javascript:void(0);" style="display: none">去登陆！</a></div>
+    </div>
+    {% endif %}
+
+
+    <!--内容分页-->
+    <div class="content-wrap">
+        {% for content in contents %}
+        <div>
+            <h2>{{content.title}}</h2>
+            作者：<span>{{content.user.username}}</span>
+            时间：<span>{{content.addTime.toLocaleString()}}</span>
+            阅读：<span>{{content.views}}</span>
+            评论：<span>1</span>
+            <p>{{content.content}}</p>
+            <button><a style="color:white;" href="/view?contentid={{content.id}}">阅读全文</a></button>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+<nav style="position: absolute;left:500px;bottom: -500px" aria-label="...">
+    <ul class="pager">
+        {% if category %}
+        <li><a href="?page={{page-1}}&category={{category}}">上一页</a></li>
+        {% else %}
+        <li><a href="?page={{page-1}}">上一页</a></li>
+        {% endif %}
+        <li>
+            {% if pages>0 %}
+            第{{page}}页/共{{pages}}页
+            {% else %}
+            啥都没有
+            {% endif %}
+        </li>
+        {% if category %}
+        <li><a href="?page={{page+1}}&category={{category}}">下一页</a></li>
+        {% else %}
+        <li><a href="?page={{page+1}}">下一页</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+<script src="/public/js/jquery.min.js"></script>
+<script src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/index.js"></script>
+</body>
+</html>
+
+
+
